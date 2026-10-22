@@ -1,0 +1,16 @@
+[
+  {
+    "cartao_id": "01020304",
+    "distancia_cm": 20.13,
+    "data": "22/10/2026",
+    "hora": "09:52:42",
+    "resultado": "PERMITIDO"
+  },
+  {
+    "cartao_id": "AABBCCDD",
+    "distancia_cm": 20.13,
+    "data": "22/10/2026",
+    "hora": "09:55:01",
+    "resultado": "NEGADO"
+  }
+]

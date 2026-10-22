@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "author": "FIAP CP03 IoT",
+  "editor": "wokwi",
+  "parts": [
+    {"type":"wokwi-esp32-devkit-v1","id":"esp","top":10,"left":0,"attrs":{}},
+    {"type":"board-mfrc522","id":"rfid","top":-100,"left":310,"attrs":{}},
+    {"type":"wokwi-hc-sr04","id":"sensor","top":190,"left":310,"attrs":{"distance":"20"}}
+  ],
+  "connections": [
+    ["rfid:3.3V","esp:3V3","red",[]],
+    ["rfid:GND","esp:GND.1","black",[]],
+    ["rfid:RST","esp:D21","green",[]],
+    ["rfid:MISO","esp:D19","blue",[]],
+    ["rfid:MOSI","esp:D23","green",[]],
+    ["rfid:SCK","esp:D18","yellow",[]],
+    ["rfid:SDA","esp:D5","orange",[]],
+    ["sensor:VCC","esp:VIN","red",[]],
+    ["sensor:GND","esp:GND.2","black",[]],
+    ["sensor:TRIG","esp:D26","green",[]],
+    ["sensor:ECHO","esp:D27","blue",[]]
+  ],
+  "dependencies": {}
+}

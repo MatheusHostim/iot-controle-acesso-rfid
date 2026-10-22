@@ -1,0 +1,176 @@
+[
+  {
+    "id": "tab_cp03",
+    "type": "tab",
+    "label": "CP03 Controle Acesso",
+    "disabled": false,
+    "info": "RFID + HC-SR04 -> MQTT -> Node-RED -> Flask"
+  },
+  {
+    "id": "broker_cp03",
+    "type": "mqtt-broker",
+    "name": "HiveMQ Publico",
+    "broker": "broker.hivemq.com",
+    "port": "1883",
+    "clientid": "",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": "4",
+    "keepalive": "60",
+    "cleansession": true,
+    "autoUnsubscribe": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthPayload": "",
+    "birthMsg": {},
+    "closeTopic": "",
+    "closeQos": "0",
+    "closePayload": "",
+    "closeMsg": {},
+    "willTopic": "",
+    "willQos": "0",
+    "willPayload": "",
+    "willMsg": {}
+  },
+  {
+    "id": "mqtt_in_cp03",
+    "type": "mqtt in",
+    "z": "tab_cp03",
+    "name": "Tentativas RFID",
+    "topic": "fiap/cp03/iot/hostim2026/acessos",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker_cp03",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 160,
+    "y": 140,
+    "wires": [
+      [
+        "json_cp03"
+      ]
+    ]
+  },
+  {
+    "id": "json_cp03",
+    "type": "json",
+    "z": "tab_cp03",
+    "name": "Interpretar JSON",
+    "property": "payload",
+    "action": "obj",
+    "pretty": false,
+    "x": 370,
+    "y": 140,
+    "wires": [
+      [
+        "prepara_cp03",
+        "debug_cp03"
+      ]
+    ]
+  },
+  {
+    "id": "prepara_cp03",
+    "type": "function",
+    "z": "tab_cp03",
+    "name": "Preparar POST Flask",
+    "func": "if (!msg.payload || typeof msg.payload !== \"object\") return null;\nmsg.headers = {\"Content-Type\":\"application/json\"};\nmsg.payload = JSON.stringify(msg.payload);\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 600,
+    "y": 140,
+    "wires": [
+      [
+        "post_cp03"
+      ]
+    ]
+  },
+  {
+    "id": "post_cp03",
+    "type": "http request",
+    "z": "tab_cp03",
+    "name": "Salvar na API Flask",
+    "method": "POST",
+    "ret": "obj",
+    "paytoqs": "ignore",
+    "url": "http://127.0.0.1:5000/acessos",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 840,
+    "y": 140,
+    "wires": [
+      [
+        "resposta_cp03"
+      ]
+    ]
+  },
+  {
+    "id": "debug_cp03",
+    "type": "debug",
+    "z": "tab_cp03",
+    "name": "Evento MQTT recebido",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 620,
+    "y": 240,
+    "wires": []
+  },
+  {
+    "id": "resposta_cp03",
+    "type": "debug",
+    "z": "tab_cp03",
+    "name": "Resposta Flask",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "statusCode",
+    "statusType": "msg",
+    "x": 1050,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "inject_teste_cp03",
+    "type": "inject",
+    "z": "tab_cp03",
+    "name": "TESTE sem Wokwi (clique)",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{\"cartao_id\":\"01020304\",\"distancia_cm\":20,\"resultado\":\"PERMITIDO\"}",
+    "payloadType": "json",
+    "x": 165,
+    "y": 320,
+    "wires": [
+      [
+        "prepara_cp03"
+      ]
+    ]
+  }
+]
